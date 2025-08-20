@@ -11,8 +11,14 @@ const app = express();
 // Connect to MongoDB (expects process.env.MONGO_URI)
 connectDB();
 
-// Global middleware
-app.use(cors());
+// Configure CORS to allow only your frontend domain
+const corsOptions = {
+  origin: "https://customer-sentiment-analysis.netlify.app/",  
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,  
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "5mb" })); // increased limit for batch imports
 app.use(express.urlencoded({ extended: true }));
 
@@ -21,13 +27,9 @@ app.get("/", (_req, res) => {
   res.status(200).send("Backend API is running");
 });
 
- import feedbackRoutes from './routes/feedback.routes.js';
-app.use('/api/feedback', feedbackRoutes);
+import feedbackRoutes from "./routes/feedback.routes.js";
+app.use("/api/feedback", feedbackRoutes);
 
-
-
- 
- 
 // 404 handler for unmatched routes
 app.use((req, res) => {
   res.status(404).json({ error: `Route not found: ${req.originalUrl}` });
