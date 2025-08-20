@@ -1,0 +1,272 @@
+[
+  {
+    "id": "f1",
+    "text": "The camera quality is fantastic and super clear!",
+    "date": "2025-08-01T08:30:00Z",
+    "category": "Camera",
+    "source": "Twitter",
+    "model": "Pixel 6",
+    "customerId": "cust001"
+  },
+  {
+    "id": "f2",
+    "text": "Battery drains quickly and heats up after an hour of use.",
+    "date": "2025-08-01T09:15:00Z",
+    "category": "Battery",
+    "source": "Facebook",
+    "model": "Pixel 5",
+    "customerId": "cust002"
+  },
+  {
+    "id": "f3",
+    "text": "Package arrived damaged but customer service was helpful.",
+    "date": "2025-08-02T10:45:00Z",
+    "category": "Package",
+    "source": "Email",
+    "model": "Pixel 6",
+    "customerId": "cust003"
+  },
+  {
+    "id": "f4",
+    "text": "Fast charging works great, charges fully in 30 mins.",
+    "date": "2025-08-02T11:00:00Z",
+    "category": "Charging",
+    "source": "Twitter",
+    "model": "Pixel 6 Pro",
+    "customerId": "cust004"
+  },
+  {
+    "id": "f5",
+    "text": "Overpriced compared to features offered by competitors.",
+    "date": "2025-08-03T08:20:00Z",
+    "category": "Pricing",
+    "source": "Reddit",
+    "model": "Pixel 5a",
+    "customerId": "cust005"
+  },
+  {
+    "id": "f6",
+    "text": "The camera performance in low light is disappointing.",
+    "date": "2025-08-03T09:45:00Z",
+    "category": "Camera",
+    "source": "Instagram",
+    "model": "Pixel 6",
+    "customerId": "cust006"
+  },
+  {
+    "id": "f7",
+    "text": "Battery life lasts all day, even with heavy use.",
+    "date": "2025-08-04T14:30:00Z",
+    "category": "Battery",
+    "source": "Facebook",
+    "model": "Pixel 6 Pro",
+    "customerId": "cust007"
+  },
+  {
+    "id": "f8",
+    "text": "Package was delayed but arrived intact.",
+    "date": "2025-08-04T15:10:00Z",
+    "category": "Package",
+    "source": "Email",
+    "model": "Pixel 5a",
+    "customerId": "cust008"
+  },
+  {
+    "id": "f9",
+    "text": "Charging cable heats up excessively during fast charge.",
+    "date": "2025-08-05T10:50:00Z",
+    "category": "Charging",
+    "source": "Twitter",
+    "model": "Pixel 6",
+    "customerId": "cust009"
+  },
+  {
+    "id": "f10",
+    "text": "Great value for money, very satisfied with the phone.",
+    "date": "2025-08-05T12:00:00Z",
+    "category": "Pricing",
+    "source": "Reddit",
+    "model": "Pixel 5",
+    "customerId": "cust010"
+  },
+  {
+    "id": "f11",
+    "text": "Camera lens scratched easily after just a month.",
+    "date": "2025-08-06T11:15:00Z",
+    "category": "Camera",
+    "source": "Instagram",
+    "model": "Pixel 6 Pro",
+    "customerId": "cust011"
+  },
+  {
+    "id": "f12",
+    "text": "Battery life is mediocre, expected better performance.",
+    "date": "2025-08-06T13:00:00Z",
+    "category": "Battery",
+    "source": "Facebook",
+    "model": "Pixel 5a",
+    "customerId": "cust012"
+  },
+  {
+    "id": "f13",
+    "text": "Package arrived early, very well packed.",
+    "date": "2025-08-07T09:00:00Z",
+    "category": "Package",
+    "source": "Email",
+    "model": "Pixel 5",
+    "customerId": "cust013"
+  },
+  {
+    "id": "f14",
+    "text": "Charging port feels loose after few weeks of use.",
+    "date": "2025-08-07T10:10:00Z",
+    "category": "Charging",
+    "source": "Twitter",
+    "model": "Pixel 6",
+    "customerId": "cust014"
+  },
+  {
+    "id": "f15",
+    "text": "Pricing is reasonable for the specs provided.",
+    "date": "2025-08-08T14:45:00Z",
+    "category": "Pricing",
+    "source": "Reddit",
+    "model": "Pixel 5",
+    "customerId": "cust015"
+  },
+  {
+    "id": "f16",
+    "text": "Camera app crashes randomly, frustrating experience.",
+    "date": "2025-08-08T15:30:00Z",
+    "category": "Camera",
+    "source": "Instagram",
+    "model": "Pixel 5a",
+    "customerId": "cust016"
+  },
+  {
+    "id": "f17",
+    "text": "Battery charges quickly and lasts comfortably throughout the day.",
+    "date": "2025-08-09T09:45:00Z",
+    "category": "Battery",
+    "source": "Facebook",
+    "model": "Pixel 6 Pro",
+    "customerId": "cust017"
+  },
+  {
+    "id": "f18",
+    "text": "Package was lost in transit, very disappointed.",
+    "date": "2025-08-09T10:50:00Z",
+    "category": "Package",
+    "source": "Email",
+    "model": "Pixel 6",
+    "customerId": "cust018"
+  },
+  {
+    "id": "f19",
+    "text": "Charging quality is excellent, no complaints so far.",
+    "date": "2025-08-10T11:10:00Z",
+    "category": "Charging",
+    "source": "Twitter",
+    "model": "Pixel 5",
+    "customerId": "cust019"
+  },
+  {
+    "id": "f20",
+    "text": "Pricing seems a bit high compared to other brands.",
+    "date": "2025-08-10T12:00:00Z",
+    "category": "Pricing",
+    "source": "Reddit",
+    "model": "Pixel 6 Pro",
+    "customerId": "cust020"
+  },
+  {
+    "id": "f21",
+    "text": "Camera quality gets worse over time for no reason.",
+    "date": "2025-08-11T13:30:00Z",
+    "category": "Camera",
+    "source": "Instagram",
+    "model": "Pixel 5",
+    "customerId": "cust021"
+  },
+  {
+    "id": "f22",
+    "text": "Battery overheats while charging, not safe.",
+    "date": "2025-08-11T14:00:00Z",
+    "category": "Battery",
+    "source": "Facebook",
+    "model": "Pixel 5a",
+    "customerId": "cust022"
+  },
+  {
+    "id": "f23",
+    "text": "Package arrived on time and in good condition.",
+    "date": "2025-08-12T08:15:00Z",
+    "category": "Package",
+    "source": "Email",
+    "model": "Pixel 6",
+    "customerId": "cust023"
+  },
+  {
+    "id": "f24",
+    "text": "Charging cable stopped working after a week.",
+    "date": "2025-08-12T09:45:00Z",
+    "category": "Charging",
+    "source": "Twitter",
+    "model": "Pixel 5",
+    "customerId": "cust024"
+  },
+  {
+    "id": "f25",
+    "text": "Pricing is very competitive and attractive.",
+    "date": "2025-08-13T11:00:00Z",
+    "category": "Pricing",
+    "source": "Reddit",
+    "model": "Pixel 6",
+    "customerId": "cust025"
+  },
+  {
+    "id": "f26",
+    "text": "Camera zoom feature is very useful and clear.",
+    "date": "2025-08-13T12:30:00Z",
+    "category": "Camera",
+    "source": "Instagram",
+    "model": "Pixel 6 Pro",
+    "customerId": "cust026"
+  },
+  {
+    "id": "f27",
+    "text": "Battery backup is poor on heavy usage days.",
+    "date": "2025-08-14T14:10:00Z",
+    "category": "Battery",
+    "source": "Facebook",
+    "model": "Pixel 5",
+    "customerId": "cust027"
+  },
+  {
+    "id": "f28",
+    "text": "Package delivery person was very polite, nice experience.",
+    "date": "2025-08-14T15:25:00Z",
+    "category": "Package",
+    "source": "Email",
+    "model": "Pixel 5a",
+    "customerId": "cust028"
+  },
+  {
+    "id": "f29",
+    "text": "Charging issues resolved after firmware update.",
+    "date": "2025-08-15T08:55:00Z",
+    "category": "Charging",
+    "source": "Twitter",
+    "model": "Pixel 6",
+    "customerId": "cust029"
+  },
+  {
+    "id": "f30",
+    "text": "Pricing is fair with the number of features offered.",
+    "date": "2025-08-15T09:40:00Z",
+    "category": "Pricing",
+    "source": "Reddit",
+    "model": "Pixel 5",
+    "customerId": "cust030"
+  }
+]

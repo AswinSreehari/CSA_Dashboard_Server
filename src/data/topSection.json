@@ -1,0 +1,24 @@
+{
+  "summary": {
+    "netSentimentScore": "61.11%",
+    "delta": "+61.1 pts vs prior period",
+    "totals": {
+      "feedback": 360,
+      "positive": 281,
+      "negative": 61,
+      "neutral": 18
+    }
+  },
+  "emotionDistribution": [
+    { "emotion": "happy",        "count": 255, "percentage": "70.64%", "sentiment": "Positive" },
+    { "emotion": "frustrated",   "count": 45,  "percentage": "12.47%", "sentiment": "Negative" },
+    { "emotion": "angry",        "count": 15,  "percentage": "4.16%",  "sentiment": "Negative" },
+    { "emotion": "excited",      "count": 14,  "percentage": "3.88%",  "sentiment": "Positive" },
+    { "emotion": "satisfied",    "count": 11,  "percentage": "3.05%",  "sentiment": "Positive" },
+    { "emotion": "disappointed", "count": 7,   "percentage": "1.94%",  "sentiment": "Negative" },
+    { "emotion": "neutral",      "count": 6,   "percentage": "1.66%",  "sentiment": "Neutral" },
+    { "emotion": "curious",      "count": 3,   "percentage": "0.83%",  "sentiment": "Neutral" },
+    { "emotion": "impressed",    "count": 2,   "percentage": "0.55%",  "sentiment": "Positive" },
+    { "emotion": "regret",       "count": 2,   "percentage": "0.55%",  "sentiment": "Negative" }
+  ]
+}
