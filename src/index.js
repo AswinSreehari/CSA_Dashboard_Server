@@ -13,7 +13,7 @@ connectDB();
 
 // Configure CORS to allow only your frontend domain
 const corsOptions = {
-  origin: "https://customer-sentiment-analysis.netlify.app/",  
+  origin: "https://customer-sentiment-analysis.netlify.app",  
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,  
 };
