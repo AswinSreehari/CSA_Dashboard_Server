@@ -11,11 +11,26 @@ const app = express();
 // Connect to MongoDB (expects process.env.MONGO_URI)
 connectDB();
 
-// Configure CORS to allow only your frontend domain
+// Allowed origins list
+const allowedOrigins = [
+  "https://customer-sentiment-analysis.netlify.app",
+  "http://localhost:5000"
+];
+
+// CORS options with dynamic origin check
 const corsOptions = {
-  origin: "https://customer-sentiment-analysis.netlify.app/",  
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like curl or Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS policy: This origin is not allowed"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,  
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
