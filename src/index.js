@@ -14,7 +14,7 @@ connectDB();
 // Allowed origins list
 const allowedOrigins = [
   "https://customer-sentiment-analysis.netlify.app",
-  "http://localhost:5000"
+  "http://localhost:5173"
 ];
 
 // CORS options with dynamic origin check

@@ -463,3 +463,26 @@ export async function getRadarComparison(req, res, next) {
     next(error);
   }
 }
+
+
+// -----------------------------------Filter------------------------------
+
+ 
+export async function getFilteredFeedback(req, res, next) {
+  try {
+    const { platform } = req.query;
+
+    const filter = {};
+
+    if (platform && platform !== "all") {
+      filter.platform = platform;
+    }
+
+    // Query filtered feedback documents by platform only
+    const feedbacks = await Feedback.find(filter).exec();
+
+    res.status(200).json({ success: true, data: feedbacks });
+  } catch (err) {
+    next(err);
+  }
+}
