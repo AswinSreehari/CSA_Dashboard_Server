@@ -474,11 +474,11 @@ export async function getFilteredFeedback(req, res, next) {
 
     const filter = {};
 
-    if (platform && platform !== "all") {
-      filter.platform = platform;
+     if (platform && platform !== "all") {
+       const platformNormalized = platform.charAt(0).toUpperCase() + platform.slice(1).toLowerCase();
+      filter.source = platformNormalized;
     }
 
-    // Query filtered feedback documents by platform only
     const feedbacks = await Feedback.find(filter).exec();
 
     res.status(200).json({ success: true, data: feedbacks });
@@ -486,3 +486,4 @@ export async function getFilteredFeedback(req, res, next) {
     next(err);
   }
 }
+
