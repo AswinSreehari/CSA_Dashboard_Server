@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getDataSource,
   getFilteredFeedback,
   getKeywordSentimentSummary,
   getMentionVolumeOverTime,
@@ -23,6 +24,8 @@ router.get('/sentiment-ranking', getSentimentRanking);
 router.get('/sentiment-distribution', getSentimentDistribution);
 router.get("/top-stats", getTopStats);
 router.get('/radar-comparison', getRadarComparison);
+router.get('/data-source', getDataSource);
+
 
 router.get("/filterdata", getFilteredFeedback)
 

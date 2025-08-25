@@ -114,20 +114,22 @@ export async function getKeywordSentimentSummary(req, res, next) {
 
 export async function getPlatformSentimentSummary(req, res, next) {
   try {
-    // Aggregate counts by platform and sentiment labels
+    const { platform } = req.query;
+
+    const match = {};
+    if (platform && platform !== "all") {
+      const platformNormalized = platform.charAt(0).toUpperCase() + platform.slice(1).toLowerCase();
+      match.source = platformNormalized;
+    }
+
     const aggregation = await Feedback.aggregate([
+      { $match: match },
       {
         $group: {
-          _id: '$source',   // group by platform/source field
-          positive: {
-            $sum: { $cond: [{ $eq: ['$sentiment.label', 'positive'] }, 1, 0] },
-          },
-          neutral: {
-            $sum: { $cond: [{ $eq: ['$sentiment.label', 'neutral'] }, 1, 0] },
-          },
-          negative: {
-            $sum: { $cond: [{ $eq: ['$sentiment.label', 'negative'] }, 1, 0] },
-          },
+          _id: '$source',
+          positive: { $sum: { $cond: [{ $eq: ['$sentiment.label', 'positive'] }, 1, 0] } },
+          neutral: { $sum: { $cond: [{ $eq: ['$sentiment.label', 'neutral'] }, 1, 0] } },
+          negative: { $sum: { $cond: [{ $eq: ['$sentiment.label', 'negative'] }, 1, 0] } },
         },
       },
       {
@@ -137,15 +139,16 @@ export async function getPlatformSentimentSummary(req, res, next) {
           neutral: 1,
           negative: 1,
           _id: 0,
-        },
-      },
+        }
+      }
     ]);
 
     res.json(aggregation);
-  } catch (error) {
+  } catch(error) {
     next(error);
   }
 }
+
 
 // <--------------------------SentimentOvertime------------------>
 
@@ -328,26 +331,22 @@ export async function getSentimentDistribution(req, res, next) {
 
 export async function getTopStats(req, res, next) {
   try {
-    // Aggregate overall sentiment and counts
     const aggregation = await Feedback.aggregate([
       {
         $group: {
           _id: null,
           totalMentions: { $sum: 1 },
           avgSentimentScore: { $avg: "$sentiment.score" },
-          positiveMentions: {
-            $sum: {
-              $cond: [{ $eq: ["$sentiment.label", "positive"] }, 1, 0],
-            },
-          },
-          // Add more aggregations as needed, e.g. engagement, deltas (mocked client-side or here)
+          positiveMentions: { $sum: { $cond: [{ $eq: ["$sentiment.label", "positive"] }, 1, 0] } },
+          neutralMentions: { $sum: { $cond: [{ $eq: ["$sentiment.label", "neutral"] }, 1, 0] } },
+          negativeMentions: { $sum: { $cond: [{ $eq: ["$sentiment.label", "negative"] }, 1, 0] } },
         },
       },
     ]);
 
     const result = aggregation[0] || {};
 
-    // For demo: mock change values (in real app compute changes)
+    // For demo: mock change values
     const mockChanges = {
       netSentimentChange: 2.1,
       totalMentionsChange: 12.3,
@@ -355,7 +354,6 @@ export async function getTopStats(req, res, next) {
       engagementRateChange: -1.1,
     };
 
-    // Calculate positive sentiment percent
     const positiveSentimentPercent =
       result.totalMentions > 0
         ? (result.positiveMentions / result.totalMentions) * 100
@@ -372,6 +370,8 @@ export async function getTopStats(req, res, next) {
       totalMentionsChange: mockChanges.totalMentionsChange,
       positiveSentimentPercent: Number(positiveSentimentPercent.toFixed(1)),
       positiveSentimentChange: mockChanges.positiveSentimentChange,
+      neutralMentions: result.neutralMentions || 0,
+      negativeMentions: result.negativeMentions || 0,
       engagementRate,
       engagementRateChange: mockChanges.engagementRateChange,
     });
@@ -379,6 +379,7 @@ export async function getTopStats(req, res, next) {
     next(error);
   }
 }
+
 
 // <--------------------Multi Dimentional-------------------------->
 
@@ -484,6 +485,31 @@ export async function getFilteredFeedback(req, res, next) {
     res.status(200).json({ success: true, data: feedbacks });
   } catch (err) {
     next(err);
+  }
+}
+
+// -----------------------------Data source--------------------------------------
+
+ 
+export async function getDataSource(req, res, next) {
+  try {
+     const data = await Feedback.find({}, {
+       date: 1,
+      platform: 1,
+      category: 1,
+      source: 1,
+      model: 1,
+      "sentiment.label": 1,
+      "sentiment.score": 1,
+      user: 1,
+      location: 1,
+    })
+      .sort({ date: -1 })
+      .limit(100);  
+
+    res.json(data);
+  } catch (error) {
+    next(error);
   }
 }
 

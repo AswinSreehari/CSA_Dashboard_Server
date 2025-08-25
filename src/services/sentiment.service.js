@@ -1,5 +1,4 @@
-// src/services/sentiment.service.js
-import winkSentiment from 'wink-sentiment';
+ import winkSentiment from 'wink-sentiment';
 
 export async function analyzeSentiment(text) {
   const res = winkSentiment(text);
