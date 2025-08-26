@@ -4,15 +4,15 @@ import Feedback from "../models/feedback.js";
 import { analyzeSentiment } from "../services/sentiment.service.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import moment from "moment";
 
 export async function importMockFeedback(req, res, next) {
   try {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
 
-    const filePath = join(__dirname, "../data/MockFeedback.json");
-    console.log("filePath -->", filePath);
-
+    const filePath = join(__dirname, "../data/MockFeedback_Realistic_6200.json");
+ 
     const rawContent = await fs.readFile(filePath, "utf-8");
     const feedbacks = JSON.parse(rawContent);
 
@@ -31,25 +31,29 @@ export async function importMockFeedback(req, res, next) {
           metadata: { sentimentRaw: raw },
         });
       } catch (innerErr) {
-        // Handle individual sentiment analysis failure gracefully if needed
-        console.error(
-          `Sentiment analysis failed for feedback id=${fb.id}:`,
-          innerErr
-        );
+        console.error(`Sentiment analysis failed for feedback id=${fb.id}:`, innerErr);
       }
     }
 
-    const inserted = await Feedback.insertMany(enriched);
+    // Bulk upsert to insert only new feedback based on unique 'id' field
+    const bulkOps = enriched.map((item) => ({
+      updateOne: {
+        filter: { id: item.id },
+        update: { $setOnInsert: item },
+        upsert: true,
+      }
+    }));
 
-    res
-      .status(201)
-      .json({
-        message: `Imported and inserted ${inserted.length} mock feedbacks`,
-      });
+    const bulkWriteResult = await Feedback.bulkWrite(bulkOps);
+
+    res.status(201).json({
+      message: `Imported mock feedbacks. Matched: ${bulkWriteResult.matchedCount}, Inserted: ${bulkWriteResult.upsertedCount}`,
+    });
   } catch (err) {
     next(err);
   }
 }
+
 
 export async function getKeywordSentimentSummary(req, res, next) {
   try {
@@ -513,3 +517,266 @@ export async function getDataSource(req, res, next) {
   }
 }
 
+// --------------------------------------Trending race-------------------------------
+
+ 
+export async function getTrendingModels(req, res, next) {
+  try {
+    const aggregation = await Feedback.aggregate([
+      // Project year-month string from date
+      {
+        $project: {
+          yearMonth: {
+            $dateToString: { format: "%Y-%m", date: "$date" }
+          },
+          model: "$model"
+        }
+      },
+      // Group by yearMonth and model to count mentions
+      {
+        $group: {
+          _id: { yearMonth: "$yearMonth", model: "$model" },
+          mentions: { $sum: 1 }
+        }
+      },
+       {
+        $group: {
+          _id: "$_id.yearMonth",
+          models: {
+            $push: {
+              model: "$_id.model",
+              mentions: "$mentions"
+            }
+          }
+        }
+      },
+      // Sort by yearMonth ascending
+      {
+        $sort: { _id: 1 }
+      },
+      // Project final shape with 'date' and 'models'
+      {
+        $project: {
+          _id: 0,
+          date: "$_id",
+          models: 1
+        }
+      }
+    ]);
+
+    res.json(aggregation);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// -----------------------------Product Mention--------------------------
+export async function getProductMentions(req, res, next) {
+  try {
+    const aggregation = await Feedback.aggregate([
+      {
+        $group: {
+          _id: "$model",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$_id",
+          size: "$count",
+        },
+      },
+      { $sort: { size: -1 } },
+    ]);
+
+    res.json(aggregation);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// -------------------------------Brand comparision-----------------------------
+
+export async function getBrandComparison(req, res, next) {
+  try {
+    const brandData = await Feedback.aggregate([
+      {
+         $group: {
+          _id: "$model",
+          mentions: { $sum: 1 },
+          avgSentimentScore: { $avg: "$sentiment.score" },
+        },
+      },
+      {
+         $project: {
+          _id: 0,
+          brand: "$_id",
+          mentions: 1,
+          sentimentScore: { $round: ["$avgSentimentScore", 2] },
+        },
+      },
+      {
+         $sort: { mentions: -1 },
+      },
+    ]);
+
+    res.json(brandData);
+  } catch (error) {
+    next(error);
+  }
+}
+
+// ------------------------------------------Emotion Source--------------------------------------
+
+export async function getEmotionSourceHeatmap(req, res, next) {
+  try {
+    const aggregation = await Feedback.aggregate([
+      {
+        $group: {
+          _id: { sentimentLabel: "$sentiment.label", source: "$source" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          emotion: "$_id.sentimentLabel",
+          source: "$_id.source",
+          count: 1,
+        },
+      },
+      {
+        $sort: { emotion: 1, source: 1 },
+      },
+    ]);
+
+    res.json(aggregation);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ----------------------------------------Negative Emotion breakdown-----------------------
+
+export async function getNegativeEmotionsBreakdown(req, res, next) {
+  try {
+     const aggregation = await Feedback.aggregate([
+      {
+        $match: {
+          "sentiment.label": { $in: ["negative", "very negative"] }, // adjust labels as per your data
+        },
+      },
+      {
+        $group: {
+          _id: { category: "$category", sentiment: "$sentiment.label" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id.category",
+          counts: {
+            $push: {
+              sentiment: "$_id.sentiment",
+              count: "$count",
+            },
+          },
+        },
+      },
+      {
+         $project: {
+          category: "$_id",
+          negative: {
+            $sum: {
+              $map: {
+                input: {
+                  $filter: {
+                    input: "$counts",
+                    as: "item",
+                    cond: { $eq: ["$$item.sentiment", "negative"] },
+                  },
+                },
+                as: "item",
+                in: "$$item.count",
+              },
+            },
+          },
+          veryNegative: {
+            $sum: {
+              $map: {
+                input: {
+                  $filter: {
+                    input: "$counts",
+                    as: "item",
+                    cond: { $eq: ["$$item.sentiment", "very negative"] },
+                  },
+                },
+                as: "item",
+                in: "$$item.count",
+              },
+            },
+          },
+        },
+      },
+      { $sort: { category: 1 } },
+    ]);
+
+    res.json(aggregation);
+  } catch (error) {
+    next(error);
+  }
+}
+// -------------------------------------Top negative drivers------------------------------
+ 
+export async function getTopNegativeDrivers(req, res, next) {
+  try {
+     
+
+    // Aggregate negative mention counts by category
+    const aggregation = await Feedback.aggregate([
+      {
+        $match: {
+          "sentiment.label": "negative"
+        }
+      },
+      {
+        $group: {
+          _id: "$category",
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { count: -1 } },
+      { $limit: 6 },  
+    ]);
+
+     const categories = ["Total"];
+    const negativeDriversData = [];
+    const placeholderData = [0];
+
+    let cumulative = aggregation.reduce((acc, item) => acc + item.count, 0);
+    categories.push(...aggregation.map(item => item._id));
+    negativeDriversData.push(cumulative);
+
+    let runningTotal = 0;
+    for (let i = 0; i < aggregation.length; i++) {
+      runningTotal -= aggregation[i].count;
+      placeholderData.push(cumulative + runningTotal);
+      negativeDriversData.push(aggregation[i].count);
+    }
+
+     placeholderData.push(0);
+    negativeDriversData.push(0);
+    categories.push("Closure");
+
+    res.json({
+      categories,
+      placeholderData,
+      negativeDriversData
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+ 
